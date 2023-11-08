@@ -58,7 +58,7 @@ jobs:
           version: 'latest'
 
       - name: Replace IMAGE_TAG variable
-        run: sed -i "s/$IMAGE_TAG/${{ github.sha }}/g" k8s/application.yaml
+        run: sed -i "s/\$IMAGE_TAG/${{ github.sha }}/g" k8s/application.yaml
 
       - name: Apply Kubernetes manifests
         run: kubectl apply -f k8s/application.yaml -n ${{ env.NAMESPACE }}
