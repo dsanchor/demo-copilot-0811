@@ -48,3 +48,44 @@ docker build -t demo0811 .
 docker run -p 8080:8080 demo0811
 ```
 
+
+## Deploy to AKS
+
+### Environment variables
+
+```
+export RESOURCE_GROUP=aks-demo-alb-rg
+export CLUSTER_NAME=demo
+export NAMESPACE=demo0811
+```
+
+### Get AKS credentials
+
+```
+az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
+```
+
+### Create namespace
+
+```
+kubectl create namespace $NAMESPACE
+```
+
+### Deploy the application
+
+```
+kubectl apply -f k8s/application.yaml -n $NAMESPACE
+```
+
+### Get the external IP address
+
+```
+export SVC_IP=`kubectl get svc demo0811 -n $NAMESPACE -o jsonpath='{.status.loadBalancer.ingress[0].ip}'`
+```
+
+### Test the application
+
+```
+curl http://$SVC_IP/hello
+```
+

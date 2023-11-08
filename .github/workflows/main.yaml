@@ -5,6 +5,11 @@ on:
     branches:
       - main
 
+env:
+  NAMESPACE: demo0811
+  AKS_CLUSTER: demo0811
+  AKS_RESOURCE_GROUP: demo0811
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,3 +41,24 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository }}/demo0811:${{ github.sha }}
 
+    # Deploy AKS
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Azure AKS Get Credentials
+        run: |
+            az aks get-credentials --resource-group ${{ env.AKS_RESOURCE_GROUP }} --name ${{ env.AKS_CLUSTER }}
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          version: 'latest'
+
+      - name: Replace IMAGE_TAG variable
+        run: sed -i "s/$IMAGE_TAG/${{ github.sha }}/g" k8s/application.yaml
+
+      - name: Apply Kubernetes manifests
+        run: kubectl apply -f k8s/application.yaml -n ${{ env.NAMESPACE }}
