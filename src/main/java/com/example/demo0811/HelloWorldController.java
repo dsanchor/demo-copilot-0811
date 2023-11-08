@@ -9,7 +9,7 @@ public class HelloWorldController {
 
     @GetMapping("/hello")
     public String helloWorld() {
-        String output = "Hello, World!";
+        String output = "Hello, Abanca!";
         System.out.println("Input: None");
         System.out.println("Output: " + output);
         return output;
