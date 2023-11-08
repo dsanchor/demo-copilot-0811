@@ -7,8 +7,8 @@ on:
 
 env:
   NAMESPACE: demo0811
-  AKS_CLUSTER: demo0811
-  AKS_RESOURCE_GROUP: demo0811
+  AKS_CLUSTER: demo
+  AKS_RESOURCE_GROUP: aks-demo-alb-rg
 
 jobs:
   build:
